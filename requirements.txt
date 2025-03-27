@@ -1,0 +1,7 @@
+# npm i react-icons
+
+# https://react-icons.github.io/react-icons/
+
+# GET https://v6.exchangerate-api.com/v6/YOUR-API-KEY/latest/USD
+# GET https://v6.exchangerate-api.com/v6/YOUR-API-KEY/pair/EUR/GBP
+# https://www.exchangerate-api.com/docs/pair-conversion-requests
