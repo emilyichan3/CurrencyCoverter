@@ -6,16 +6,31 @@ const CurrencyConverter = () => {
     // Prob
     const [currencies, setCurrencies] = useState({})
     const [amount, setAmount] = useState(1)
-    const [fromCurrency, setFromCurrency] = useState("USD")
+    const [fromCurrency, setFromCurrency] = useState("EUR")
     const [toCurrency, setToCurrency] = useState("TWD")    
     const [convertedAmount, setConvertedAmount] = useState(null)
+    const [lastUpdate, setLastUpdate] = useState("")   
     const apiKey = import.meta.env.VITE_EXCHANGERATE_API_KEY
+
+    // convert date format to dd-MM-YYYY
+    const formatDate = (utcString) => {
+        const date = new Date(utcString);
+        const day = String(date.getUTCDate()).padStart(2, "0"); // Zero-padded day
+        const month = date.toLocaleString("en-US", { month: "long" }); // Full month name
+        const year = date.getUTCFullYear();
+    
+        return `${day} ${month} ${year}`;
+    };
 
     const fetchCurrencies = async () => {
         try {
             const res = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/${fromCurrency}`);
             const data = await res.json();
-            
+
+            const formattedDate = formatDate(data.time_last_update_utc); // Format date
+
+            setLastUpdate(formattedDate);
+
             setCurrencies(data);
         } catch (error) {
             console.error("Error fetching: ", error);
@@ -86,11 +101,11 @@ const CurrencyConverter = () => {
             Rate: {currencies.conversion_rates?.[toCurrency]}
         </div>
         <div className="mt-4 text-lg font-medium text-right text-green-800">
-            {/* Exchange Rate: {currencies.conversion_rates[toCurrency]} */}
-
             {amount} {fromCurrency} = {convertedAmount} {toCurrency}
         </div>
-
+        <div className="mt-4 text-sm font-medium text-right text-green-800">
+            Last updated : {lastUpdate}
+        </div>
     </div>
   )
 }
